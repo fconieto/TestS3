@@ -21,7 +21,7 @@ public class UploadFileServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        FileUploader.uploadFile(request, "/home/fconieto/pruebas/");
+        FileUploader.uploadFile(request, "");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

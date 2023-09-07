@@ -14,19 +14,20 @@ public class LocalFileManager implements FileManager {
     private static final Logger logger = Logger.getLogger(LocalFileManager.class.getName());
 
     @Override
-    public File read() {
+    public File read(String fileName) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void delete() {
+    public void delete(String fileName) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void write(FileItem fileItem, File file) {
+    public void write(FileItem fileItem, String fileName) {
         try {
-            fileItem.write(file);
+            File serverFile = new File(fileName.replace(":", "_"));
+            fileItem.write(serverFile);
         } catch (Exception ex) {
             Logger.getLogger(LocalFileManager.class.getName()).log(Level.SEVERE, null, ex);
         }

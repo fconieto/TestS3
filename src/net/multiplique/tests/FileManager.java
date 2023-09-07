@@ -7,11 +7,11 @@ import org.apache.commons.fileupload.FileItem;
 
 public interface FileManager {
 
-    public void write(FileItem fileItem, File file);
+    public void write(FileItem fileItem, String fileName);
 
     public void writeImage(BufferedImage scaledImage, FileOutputStream os);
 
-    public File read();
+    public File read(String fileName);
 
-    public void delete();
+    public void delete(String fileName);
 }
