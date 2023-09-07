@@ -9,7 +9,7 @@
         <hr/>
         <ul>
             <li><a href="uploadForm.jsp">Subir un archivo</a></li>
-            <li>Descargar archivo</li>
+            <li><a href="BajarArchivo">Descargar archivo</a></li>
         </ul> 
         <hr/>
     </body>
