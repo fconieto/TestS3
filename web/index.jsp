@@ -2,7 +2,6 @@
 <html>
     <head>
         <title>Service is not available</title>
-        <link rel="icon" href="images/logo_ico.png">
     </head>
     <body>
         <h2>Probando S3</h2>
@@ -12,5 +11,6 @@
             <li><a href="BajarArchivo">Descargar archivo</a></li>
         </ul> 
         <hr/>
+            <img id="prueba.jpg" src="TraerImagen" alt="sdfadsf" max-height='160px' max-width='160px' />
     </body>
 </html>
