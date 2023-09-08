@@ -24,17 +24,18 @@ public class DownloadReferencedFile extends HttpServlet {
         FileReference fr = new FileReference();
 //        fr.id = "prueba.jpg";
 //        fr.ruta = "test/";
-        fr.id = "prueba.jpg";
-        fr.ruta = "/home/fconieto/Pictures/";
+        fr.id = "sakura.jpeg";
+        fr.ruta = "/home/desarrollo/Downloads/";
 
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment;filename=" + fr.id);
 
         try (ServletOutputStream out = response.getOutputStream()) {
             try (InputStream fileIn = fileManager.read(fr.ruta + fr.id)) {
-                byte[] outputByte = new byte[4096];
-                while (fileIn.read(outputByte, 0, 4096) != -1) {
-                    out.write(outputByte, 0, 4096);
+                byte[] outputByte = new byte[1024];
+                int readLen = 0;
+                while ((readLen = fileIn.read(outputByte)) > 0) {
+                    out.write(outputByte, 0, readLen);
                 }
             }
         } catch (IOException ex) {
