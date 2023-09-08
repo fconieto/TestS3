@@ -80,11 +80,11 @@ public class S3FileManager implements FileManager {
     @Override
     public BufferedImage getImage(String keyName){
         AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-                .withRegion(region)
+                .withRegion(REGION)
                 .build();
         BufferedImage image = null;
         try {
-            try (InputStream is = s3.getObject(bucketName, keyName).getObjectContent()) {
+            try (InputStream is = s3.getObject(BUCKET_NAME, keyName).getObjectContent()) {
                 image = ImageIO.read(is);
             }
         } catch (IOException ex) {
