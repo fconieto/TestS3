@@ -1,5 +1,6 @@
 package net.multiplique.tests;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,4 +45,16 @@ public class LocalFileManager implements FileManager {
             Logger.getLogger(LocalFileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    @Override
+    public BufferedImage getImage(String fileName){
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(new File(fileName));
+        } catch (IOException ex) {
+            Logger.getLogger(LocalFileManager.class.getName()).log(Level.SEVERE, "hubo un errorrrr", ex);
+        }
+        return image;
+    }
+
 }

@@ -97,7 +97,7 @@ public class FileUploader {
                                 factor25 = 1;
                                 factor50 = 1;
                             }
-                            //ImageTool.createStamp(fr, factor25, "R25_");
+                            ImageTool.createStamp(fr, factor25, "R25_");
                             //ImageTool.createStamp(fr, factor50, "R50_");
 
                             fr.reducida = "1";

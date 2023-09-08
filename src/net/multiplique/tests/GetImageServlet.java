@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Calendar;
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageOutputStream;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 public class GetImageServlet extends HttpServlet {
 
     private static final long serialVersionUID = 6842028303135L;
+    
+    private final static FileManager fileManager = new S3FileManager();
+    //private final static FileManager fileManager = new LocalFileManager();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -30,14 +34,15 @@ public class GetImageServlet extends HttpServlet {
 
         try (OutputStream out = response.getOutputStream()) {
             FileReference fr = new FileReference();
-//        fr.id = "prueba.jpg";
-//        fr.ruta = "test/";
+            
+            
             fr.id = "prueba.jpg";
-            fr.ruta = "/home/fconieto/Downloads/";
+            fr.ruta = "test/";
+            // fr.id = "prueba.jpg";
+            // fr.ruta = "/home/desarrollo/Downloads/";
 
-            File file = new File(fr.ruta + fr.id);
-            if (file.exists()) {
-                Image image = ImageIO.read(file);
+            Image image = fileManager.getImage(fr.ruta + fr.id); // ImageIO.read(file);
+            if (image != null){               
                 int heigth = 200;
                 int width = 200 * image.getWidth(null) / image.getHeight(null);
                 image = image.getScaledInstance(width, heigth, Image.SCALE_SMOOTH);

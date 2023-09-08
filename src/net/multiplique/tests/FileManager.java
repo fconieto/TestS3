@@ -15,4 +15,6 @@ public interface FileManager {
     public InputStream read(String fileName) throws FileNotFoundException;
 
     public void delete(String fileName);
+    
+    public BufferedImage getImage(String fileName);
 }

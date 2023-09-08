@@ -39,8 +39,6 @@ public class S3FileManager implements FileManager {
 
     @Override
     public void delete(String keyName) {
-        keyName = "test/test2/prueba.jpg"; // + fileName;
-
         AmazonS3 s3 = AmazonS3ClientBuilder.standard()
                 .withRegion(region)
                 .build();
@@ -56,8 +54,6 @@ public class S3FileManager implements FileManager {
 
     @Override
     public void write(FileItem fileItem, String keyName) {
-        keyName = "test/test2/prueba.jpg"; // + fileName;
-
         AmazonS3 s3 = AmazonS3ClientBuilder.standard()
                 .withRegion(region)
                 .build();
@@ -81,9 +77,21 @@ public class S3FileManager implements FileManager {
             Logger.getLogger(S3FileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    private String getFolder(String keyName) {
-        return keyName.substring(0, keyName.lastIndexOf("/") + 1);
+    
+    @Override
+    public BufferedImage getImage(String keyName){
+        AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+                .withRegion(region)
+                .build();
+        BufferedImage image = null;
+        try {
+            try (InputStream is = s3.getObject(bucketName, keyName).getObjectContent()) {
+                image = ImageIO.read(is);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(LocalFileManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return image;
     }
 
 }
