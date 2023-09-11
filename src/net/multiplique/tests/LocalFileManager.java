@@ -47,12 +47,22 @@ public class LocalFileManager implements FileManager {
     }
     
     @Override
+    public void writeImage(BufferedImage image, String fileName) {
+        try {
+            File file = new File(fileName);
+            ImageIO.write(image, fileName.substring(fileName.lastIndexOf(".") + 1), file);
+        } catch (IOException ex) {
+            Logger.getLogger(LocalFileManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
     public BufferedImage getImage(String fileName){
         BufferedImage image = null;
         try {
             image = ImageIO.read(new File(fileName));
         } catch (IOException ex) {
-            Logger.getLogger(LocalFileManager.class.getName()).log(Level.SEVERE, "hubo un errorrrr", ex);
+            Logger.getLogger(LocalFileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         return image;
     }

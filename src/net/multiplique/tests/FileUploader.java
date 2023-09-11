@@ -18,6 +18,7 @@ public class FileUploader {
     private static final Logger logger = Logger.getLogger(FileUploader.class.getName());
 
     private final static FileManager fileManager = new S3FileManager();
+    // private final static FileManager fileManager = new LocalFileManager();
     
     private FileUploader() {
 
@@ -82,7 +83,7 @@ public class FileUploader {
                         }
 
                         String fileName = path + fr.id;
-                        fileManager.write(item, path);
+                        fileManager.write(item, fileName);
 
                         if (fr.type.equals("image/jpeg")) {
                             double factor25 = 0.25;
@@ -97,8 +98,9 @@ public class FileUploader {
                                 factor25 = 1;
                                 factor50 = 1;
                             }
-                            ImageTool.createStamp(fr, factor25, "R25_");
-                            //ImageTool.createStamp(fr, factor50, "R50_");
+                            ImageTool it = new ImageTool(fileManager);
+                            it.createStamp(fr, factor25, "R25_");
+                            it.createStamp(fr, factor50, "R50_");
 
                             fr.reducida = "1";
                         }
