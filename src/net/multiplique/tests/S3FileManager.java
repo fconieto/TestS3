@@ -26,6 +26,21 @@ public class S3FileManager implements FileManager {
     private static final Regions REGION = Regions.US_EAST_1;
 
     private static final Logger logger = Logger.getLogger(S3FileManager.class.getName());
+    
+    
+    @Override
+    public void copy(String sourceKey, String destinationKey) throws FileNotFoundException {
+        AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+                .withRegion(REGION)
+                .build();
+
+        if (!s3.doesObjectExist(BUCKET_NAME, sourceKey)) {
+            throw new FileNotFoundException("Source does not exist.");
+        }
+        
+        // copyObject(BUCKET_SOURCE, BUCKET_DEST, SOURCE_KEY, DEST_KEY)
+        s3.copyObject(BUCKET_NAME, BUCKET_NAME, sourceKey, destinationKey);
+    }
 
     @Override
     public InputStream read(String keyName) throws FileNotFoundException {
