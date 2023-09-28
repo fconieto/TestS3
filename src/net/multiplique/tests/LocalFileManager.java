@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -31,7 +32,7 @@ public class LocalFileManager implements FileManager {
         File destFile = new File(dest);
         
         try {
-            Files.copy(sourceFile.toPath(), destFile.toPath());
+            Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
             Logger.getLogger(LocalFileManager.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -39,8 +39,7 @@ public class S3FileManager implements FileManager {
         }
         
         if(destKey.endsWith("/")){
-            String fileName = sourceKey.substring(sourceKey.lastIndexOf("/")+1);
-            destKey = destKey + fileName;
+            destKey = destKey + sourceKey.substring(sourceKey.lastIndexOf("/") + 1);
         }
         
         // copyObject(BUCKET_SOURCE, BUCKET_DEST, SOURCE_KEY, DEST_KEY)
