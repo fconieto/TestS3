@@ -8,7 +8,7 @@ import org.apache.commons.fileupload.FileItem;
 
 public interface FileManager {
 
-    public void copy(String source, String destination) throws FileNotFoundException ;
+    public void copy(String source, String dest) throws FileNotFoundException ;
     
     public void write(FileItem fileItem, String fileName);
     

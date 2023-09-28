@@ -29,7 +29,7 @@ public class S3FileManager implements FileManager {
     
     
     @Override
-    public void copy(String sourceKey, String destinationKey) throws FileNotFoundException {
+    public void copy(String sourceKey, String destKey) throws FileNotFoundException {
         AmazonS3 s3 = AmazonS3ClientBuilder.standard()
                 .withRegion(REGION)
                 .build();
@@ -38,8 +38,13 @@ public class S3FileManager implements FileManager {
             throw new FileNotFoundException("Source does not exist.");
         }
         
+        if(destKey.endsWith("/")){
+            String fileName = sourceKey.substring(sourceKey.lastIndexOf("/")+1);
+            destKey = destKey + fileName;
+        }
+        
         // copyObject(BUCKET_SOURCE, BUCKET_DEST, SOURCE_KEY, DEST_KEY)
-        s3.copyObject(BUCKET_NAME, BUCKET_NAME, sourceKey, destinationKey);
+        s3.copyObject(BUCKET_NAME, BUCKET_NAME, sourceKey, destKey);
     }
 
     @Override

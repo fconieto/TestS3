@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -19,16 +19,20 @@ public class LocalFileManager implements FileManager {
     private static final Logger logger = Logger.getLogger(LocalFileManager.class.getName());
     
     @Override
-    public void copy(String source, String destination) throws FileNotFoundException {
-        InputStream is = new FileInputStream(source);
+    public void copy(String source, String dest) throws FileNotFoundException {
+        File sourceFile = new File(source);
+        if(!sourceFile.exists()){
+            throw new FileNotFoundException("Source does not exist.");
+        }
+        
+        if(dest.endsWith("/")){
+            dest = dest + sourceFile.getName();
+        }
+        File destFile = new File(dest);
+        
         try {
-            OutputStream os = new FileOutputStream(destination);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                os.write(buffer, 0, length);
-            }
-        } catch (Exception ex) {
+            Files.copy(sourceFile.toPath(), destFile.toPath());
+        } catch (IOException ex) {
             Logger.getLogger(LocalFileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
