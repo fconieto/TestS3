@@ -1,6 +1,5 @@
 package net.multiplique.tests;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,33 +8,62 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import org.apache.commons.fileupload.FileItem;
 
 public class LocalFileManager implements FileManager {
 
     private static final Logger logger = Logger.getLogger(LocalFileManager.class.getName());
-    
+
+    public static final String homeTomcatK2Path = "";
+
     @Override
     public void copy(String source, String dest) throws FileNotFoundException {
-        File sourceFile = new File(source);
-        if(!sourceFile.exists()){
+        File origen = new File(homeTomcatK2Path + source);
+        if (!origen.exists()) {
             throw new FileNotFoundException("Source does not exist.");
         }
-        
-        if(dest.endsWith("/")){
-            dest = dest + sourceFile.getName();
+
+        int indexName = dest.endsWith("/") ? dest.length() : dest.lastIndexOf("/");
+
+        File dirDestino = new File(homeTomcatK2Path + dest.substring(0, indexName));
+        dirDestino.mkdirs();
+
+        if (origen.isDirectory()) {
+            try (Stream<Path> walk = Files.walk(origen.toPath())) {
+                walk.filter(Files::isRegularFile).forEach(fpath -> {
+                    try {
+                        String destinoFileName = fpath.toString().substring(fpath.toString().lastIndexOf("/"));
+                        Files.copy(fpath, Paths.get(dirDestino.getAbsolutePath() + destinoFileName), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException ex) {
+                        logger.log(Level.SEVERE, "Copy directory Internal ", ex);
+                    }
+                });
+            } catch (IOException ex) {
+                logger.log(Level.SEVERE, "Copy directory External: ", ex);
+            }
         }
-        File destFile = new File(dest);
-        
-        try {
-            Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex) {
-            Logger.getLogger(LocalFileManager.class.getName()).log(Level.SEVERE, null, ex);
+
+        if (origen.isFile()) {
+            try {
+                String destinoFileName = dest.substring(indexName);
+
+                if (dest.endsWith("/")) {
+                    destinoFileName = source.substring(source.lastIndexOf("/"));
+                }
+
+                Files.copy(origen.toPath(), Paths.get(dirDestino.getAbsolutePath() + destinoFileName), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException ex) {
+                logger.log(Level.SEVERE, "Copy file error", ex);
+            }
         }
+
     }
 
     @Override
@@ -66,7 +94,7 @@ public class LocalFileManager implements FileManager {
             Logger.getLogger(LocalFileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     public void writeImage(BufferedImage image, String fileName) {
         try {
@@ -76,9 +104,9 @@ public class LocalFileManager implements FileManager {
             Logger.getLogger(LocalFileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
-    public BufferedImage getImage(String fileName){
+    public BufferedImage getImage(String fileName) {
         BufferedImage image = null;
         try {
             image = ImageIO.read(new File(fileName));
